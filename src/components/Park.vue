@@ -40,6 +40,8 @@ export default {
     const deviceheight = window.screen.width;
     if (deviceheight >= 650 && devicewidth >= 650) {
       this.portraitsrc = `${this.publicPath}portrait-200.html` 
+    } else if (deviceheight >= 650 || devicewidth >= 650) {
+      this.portraitsrc = `${this.publicPath}portrait-150.html`
     } else {
       this.portraitsrc = `${this.publicPath}portrait-100.html`
     }
@@ -106,7 +108,7 @@ export default {
               const button = document.getElementsByClassName('element')[0]
               button.style['visibility'] = 'hidden'
               self.sequence_number = data['sequence_number'];
-              label.innerText = `이미 헌화를 해주셨습니다. \n 현재까지 ${self.sequence_number} 명이 헌화해주셨습니다.`
+              label.innerText = `이미 헌화를 해주셨습니다. \n 현재까지 ${self.sequence_number} 명이 헌화 해주셨습니다.`
               label.style['animation-duration'] = '8s'
               label.style['animation-name'] = 'labelup'
           }).catch(function() {
