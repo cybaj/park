@@ -179,7 +179,7 @@ export default {
           framewindow.postMessage(message, '*')
         } else {
           if (this.sizelevel == 200 || this.sizelevel == 150 || this.sizelevel == 100) {
-            const width = screenwidth - this.offset * 3;
+            const width = screenwidth - this.offset * 1;
             const height = width * this.ratio;
 
             portrait.style['width'] = `${width}px`
@@ -287,6 +287,12 @@ body {
   */
   height: 90vh;
   justify-content: center;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .cover {
