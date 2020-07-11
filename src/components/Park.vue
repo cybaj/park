@@ -161,10 +161,10 @@ export default {
 
         const screenwidth = window.screen.width
         const screenheight = window.screen.height
-        const devicewidth = screenwidth * window.devicePixelRatio
-        const deviceheight = screenheight * window.devicePixelRatio
+//        const devicewidth = screenwidth * window.devicePixelRatio
+//        const deviceheight = screenheight * window.devicePixelRatio
         if (screenwidth > screenheight) {
-          const width = screensize - this.offset;
+          const width = screenwidth - this.offset;
           const height = width * this.ratio;
 
           portrait.style['width'] = `${width}px`
@@ -179,7 +179,7 @@ export default {
           framewindow.postMessage(message, '*')
         } else {
           if (this.sizelevel == 200 || this.sizelevel == 150 || this.sizelevel == 100) {
-            const width = screensize - this.offset * 3;
+            const width = screenwidth - this.offset * 3;
             const height = width * this.ratio;
 
             portrait.style['width'] = `${width}px`
@@ -192,7 +192,7 @@ export default {
             }
             framewindow.postMessage(message, '*')
           } else {
-            const width = screensize - this.offset;
+            const width = screenwidth - this.offset;
             const height = width * this.ratio;
   
             portrait.style['width'] = `${width}px`
