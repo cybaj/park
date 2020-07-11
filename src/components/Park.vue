@@ -31,30 +31,15 @@ export default {
     publicPath: process.env.BASE_URL,
     portraitsrc: '',
     sequence_number: 10,
-    done: false
+    done: false,
+    working: false,
+    current: false
   }},
-  computed: {
-    isDone: function(){
-      return this.done
-    }
-  },
   mounted: function(){
     const devicewidth = window.screen.width;
     const deviceheight = window.screen.width;
     if (deviceheight >= 650 && devicewidth >= 650) {
       this.portraitsrc = `${this.publicPath}portrait-200.html` 
-      const self = this
-      console.log('done')
-      fetch('https://p2pebb68te.execute-api.ap-northeast-2.amazonaws.com/park_counter_stage/number', {
-        method: 'POST'
-      }).then(function(response) {
-          return response.json();
-      }).then(function(data) {
-          console.log(data);
-          self.sequence_number = data['sequence_number'];
-      }).catch(function() {
-          console.log("Booo");
-      });
     } else {
       this.portraitsrc = `${this.publicPath}portrait-100.html`
     }
@@ -71,19 +56,69 @@ export default {
       const label = document.getElementsByClassName('label')[0]
       label.style['animation-duration'] = '4s'
       label.style['animation-name'] = 'labeldown'
+
+      this.timeout1 = window.setTimeout(()=>{
+        const self = this
+        console.log('done')
+        if (window.localStorage['isLaid'] != 'true') {
+          this.current = true;
+          fetch('https://p2pebb68te.execute-api.ap-northeast-2.amazonaws.com/park_counter_stage/number', {
+            method: 'POST'
+          }).then(function(response) {
+              return response.json();
+          }).then(function(data) {
+              console.log(data);
+              self.sequence_number = data['sequence_number'];
+              window.localStorage['isLaid'] = true;
+          }).catch(function() {
+              console.log("Booo");
+          });
+          return true;
+        }
+      }, 4000)
+
       this.timeout = window.setTimeout(()=>{
+        if (window.localStorage['isLaid'] != 'true') {
+          const button = document.getElementsByClassName('element')[0]
+          button.style.display = 'none'
+          label.style.display = 'none'
+        }
+      }, 4000)
+
+      this.timeout_cover = window.setTimeout(()=>{
+        if (this.current == true) {
+          const cover = document.getElementsByClassName('cover')[0]
+          cover.style.display = 'block'
+          cover.style['animation-duration'] = '6s'
+          cover.style['animation-name'] = 'uncover'
+          this.working = true;
+        } else {
+          this.doOther();
+          console.log('User have laid flower already.')
+          const label = document.getElementsByClassName('label')[0]
+
+          fetch('https://p2pebb68te.execute-api.ap-northeast-2.amazonaws.com/park_counter_stage/number', {
+            method: 'POST'
+          }).then(function(response) {
+              return response.json();
+          }).then(function(data) {
+              console.log(data);
+              const button = document.getElementsByClassName('element')[0]
+              button.style['visibility'] = 'hidden'
+              self.sequence_number = data['sequence_number'];
+              label.innerText = `이미 헌화를 해주셨습니다. \n 현재까지 ${self.sequence_number} 명이 헌화해주셨습니다.`
+              label.style['animation-duration'] = '8s'
+              label.style['animation-name'] = 'labelup'
+          }).catch(function() {
+              console.log("Booo");
+          });
+         
+        }
+      }, 4100);
+      this.timeout_cover_2 = window.setTimeout(()=>{
         const cover = document.getElementsByClassName('cover')[0]
-        cover.style.display = 'block'
-        label.style.display = 'none'
-        cover.style['animation-duration'] = '6s'
-        cover.style['animation-name'] = 'uncover'
-        console.log('fulfilled', this)
-        this.done = true;
-      }, 4000);
-      this.timeout2 = window.setTimeout(()=>{
-        const button = document.getElementsByClassName('element')[0]
-        button.style.display = 'none'
-      }, 4000);
+        cover.style.display = 'none'
+      }, 10100);
       this.timeout3 = window.setTimeout(()=>{
         const framewindow = document.getElementsByClassName('portraitframe')[0].contentWindow;
 
@@ -146,14 +181,17 @@ export default {
         portrait.style['display'] = 'none'
       }, 17500)
       this.timeout5 = window.setTimeout(()=>{
+        const flower = document.getElementsByClassName('flower')[0]
         const laying = document.getElementsByClassName('laying')[0]
+        const flowerimage = document.getElementsByClassName('flowerimage')[0]
         const current_state = this.sequence_number;
+        laying.style['display'] = 'flex'
+        flower.style['display'] = 'flex'
+        laying.style['animation-name'] = 'showup'
         laying.innerText = `${current_state} 번째로 헌화하였습니다.`
         laying.style['animation-duration'] = '5s'
         laying.style['animation-name'] = 'showup'
-        const flowerimage = document.getElementsByClassName('flowerimage')[0]
         flowerimage.style['display'] = 'block'
-        const flower = document.getElementsByClassName('flower')[0]
         flower.style['animation-duration'] = '5s'
         flower.style['animation-name'] = 'showup'
       }, 18500)
@@ -163,42 +201,42 @@ export default {
         const flower = document.getElementsByClassName('flower')[0]
         flower.style['opacity'] = '1.0'
       }, 22500)
-      console.log(button.class)
     },
-    'doThat': function(e) {
+    'doThat': function() {
       console.log('mouseup fired', this.done)
-      if (this.isDone == true) {
-        const self = this
-        console.log('done')
-        fetch('https://p2pebb68te.execute-api.ap-northeast-2.amazonaws.com/park_counter_stage/number', {
-          method: 'POST'
-        }).then(function(response) {
-            return response.json();
-        }).then(function(data) {
-            console.log(data);
-            self.sequence_number = data['sequence_number'];
-        }).catch(function() {
-            console.log("Booo");
-        });
-        return true;
-      } else {
+      if (this.working == false) {
         window.clearTimeout(this.timeout)
+        window.clearTimeout(this.timeout_cover)
+        window.clearTimeout(this.timeout_cover_2)
+        window.clearTimeout(this.timeout1)
         window.clearTimeout(this.timeout2)
         window.clearTimeout(this.timeout3)
         window.clearTimeout(this.timeout4)
         window.clearTimeout(this.timeout5)
         window.clearTimeout(this.timeout6)
-        const button = e.target
+        const button = document.getElementsByClassName('element')[0]
         button.class = "element convex"
         // button.style.background = 'linear-gradient(-45deg, rgba(0,0,0,0.22), rgba(255,255,255,0.25))';
         button.style['animation-duration'] = '4s'
         button.style['animation-name'] = 'up'
-        console.log(button.class)
         const label = document.getElementsByClassName('label')[0]
         label.style['animation-duration'] = '4s'
         label.style['animation-name'] = 'labelup'
       }
     },
+    'doOther': function() {
+      if (this.working == false) {
+        window.clearTimeout(this.timeout)
+        window.clearTimeout(this.timeout_cover)
+        window.clearTimeout(this.timeout_cover_2)
+        window.clearTimeout(this.timeout1)
+        window.clearTimeout(this.timeout2)
+        window.clearTimeout(this.timeout3)
+        window.clearTimeout(this.timeout4)
+        window.clearTimeout(this.timeout5)
+        window.clearTimeout(this.timeout6)
+      }
+    }
   }
 }
 
@@ -332,7 +370,7 @@ body {
   }
 }
 
-@keyframes up {
+@keyframes labelup {
   from {
     opacity: 0.5;
   }
@@ -364,16 +402,16 @@ body {
   box-shadow: 12px 12px 16px 0 rgba(0, 0, 0, 0.25),
    -8px -8px 12px 0 rgba(255, 255, 255, 0.3);
   border-radius: 15px;
-  display: flex;
   justify-content: center;
   opacity: 0.0;
+  display: none;
 }
 
 .flower {
+  display: none;
   margin: 15px;
   padding: 30px;
   align-items: center;
-  display: flex;
   justify-content: center;
   opacity: 0.0;
 }
