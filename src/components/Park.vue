@@ -54,12 +54,12 @@ export default {
       this.fontsize = 2;
       this.sizelevel = 400
     } else if (deviceheight >= 650 || devicewidth >= 650) {
-      this.portraitsrc = `${this.publicPath}portrait-200.html`
+      this.portraitsrc = `${this.publicPath}portrait-150.html`
       console.log('150')
       if (devicewidth >= 800) {
-        this.fontsize = 3;
+        this.fontsize = 4;
       } else {
-        this.fontsize = 2;
+        this.fontsize = 3;
       }
       this.sizelevel = 200
     } else {
