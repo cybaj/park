@@ -40,12 +40,16 @@ export default {
     const deviceheight = window.screen.height;
     if (deviceheight >= 2048 && devicewidth >= 2048){
       this.portraitsrc = `${this.publicPath}portrait-400.html` 
+      console.log('400')
     } else if (deviceheight >= 650 && devicewidth >= 650) {
       this.portraitsrc = `${this.publicPath}portrait-200.html` 
+      console.log('200')
     } else if (deviceheight >= 650 || devicewidth >= 650) {
       this.portraitsrc = `${this.publicPath}portrait-150.html`
+      console.log('150')
     } else {
       this.portraitsrc = `${this.publicPath}portrait-100.html`
+      console.log('100')
     }
 
     console.log(this.portraitsrc)
@@ -164,8 +168,7 @@ export default {
               wrapperwidth: width
             }
             framewindow.postMessage(message, '*')
-          }
-          else {
+          } else {
             const width = screenwidth - this.offset;
             const height = width * this.ratio;
   
