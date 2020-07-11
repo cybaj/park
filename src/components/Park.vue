@@ -38,7 +38,9 @@ export default {
   mounted: function(){
     const devicewidth = window.screen.width;
     const deviceheight = window.screen.height;
-    if (deviceheight >= 650 && devicewidth >= 650) {
+    if (deviceheight >= 2048 && devicewidth >= 2048){
+      this.portraitsrc = `${this.publicPath}portrait-400.html` 
+    } else if (deviceheight >= 650 && devicewidth >= 650) {
       this.portraitsrc = `${this.publicPath}portrait-200.html` 
     } else if (deviceheight >= 650 || devicewidth >= 650) {
       this.portraitsrc = `${this.publicPath}portrait-150.html`
