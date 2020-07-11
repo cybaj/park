@@ -49,9 +49,9 @@ export default {
       this.sizelevel = 400
       this.fontsize = 3;
     } else if (deviceheight >= 1000 && devicewidth >= 1000) {
-      this.portraitsrc = `${this.publicPath}portrait-400.html` 
+      this.portraitsrc = `${this.publicPath}portrait-200.html` 
       console.log('200')
-      this.fontsize = 2;
+      this.fontsize = 4;
       this.sizelevel = 400
     } else if (deviceheight >= 650 || devicewidth >= 650) {
       this.portraitsrc = `${this.publicPath}portrait-150.html`
@@ -164,7 +164,7 @@ export default {
         const devicewidth = screenwidth * window.devicePixelRatio
         const deviceheight = screenheight * window.devicePixelRatio
         if (screenwidth > screenheight) {
-          const width = deviceheight - this.offset;
+          const width = screensize - this.offset;
           const height = width * this.ratio;
 
           portrait.style['width'] = `${width}px`
@@ -179,7 +179,7 @@ export default {
           framewindow.postMessage(message, '*')
         } else {
           if (this.sizelevel == 200 || this.sizelevel == 150 || this.sizelevel == 100) {
-            const width = devicewidth - this.offset * 3;
+            const width = screensize - this.offset * 3;
             const height = width * this.ratio;
 
             portrait.style['width'] = `${width}px`
@@ -192,7 +192,7 @@ export default {
             }
             framewindow.postMessage(message, '*')
           } else {
-            const width = devicewidth - this.offset;
+            const width = screensize - this.offset;
             const height = width * this.ratio;
   
             portrait.style['width'] = `${width}px`
