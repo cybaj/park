@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <style>
 html {
-  font-size:1px !important;
+  font-size:1px;
   padding: 0;
   margin: 0;
 }
@@ -26,8 +26,10 @@ function receiveMessage(event)
   const offset = 50
   const width = event.data.wrapperwidth - offset
   const height = event.data.wrapperheight - offset
+  const fontsize = event.data.fontsize
   document.querySelector('body').style.width = width + 'px'
   document.querySelector('body').style.height = height + 'px'
+  document.querySelector('html').style['font-size'] = fontsize + 'px'
 }
 </script>
 </head><body>
