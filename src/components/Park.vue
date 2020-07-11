@@ -296,6 +296,12 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+body::-webkit-scrollbar {
+      display: none;
 }
 
 .cover {
